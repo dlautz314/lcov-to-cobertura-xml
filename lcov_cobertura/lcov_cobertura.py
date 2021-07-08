@@ -19,10 +19,10 @@ from optparse import OptionParser
 
 from distutils.spawn import find_executable
 
-CPPFILT = "c++filt"
+CPPFILT = ["c++filt","-n"]
 HAVE_CPPFILT = False
 
-if find_executable(CPPFILT) is not None:
+if find_executable(CPPFILT[0]) is not None:
     HAVE_CPPFILT = True
 
 VERSION = '1.6'
@@ -37,6 +37,7 @@ class Demangler(object):
     def demangle(self, name):
         newname = name + "\n"
         self.pipe.stdin.write(newname.encode('utf-8'))
+        self.pipe.stdin.flush()
         res = self.pipe.stdout.readline()
         return str(res.rstrip())
 
